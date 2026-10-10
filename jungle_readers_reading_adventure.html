@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jungle Readers: Reading Adventure!</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for playful, child-friendly typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for friendly jungle icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for celebratory rewards -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #134e4e 0%, #198754 50%, #2f855a 100%);
+            min-height: 100vh;
+        }
+        .title-font {
+            font-family: 'Fredoka One', cursive;
+        }
+        /* Custom jungle animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes pulse-gentle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-pulse-gentle {
+            animation: pulse-gentle 2s infinite;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <header class="bg-emerald-900/90 backdrop-blur-md text-white shadow-lg sticky top-0 z-50 border-b-4 border-amber-400">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goToMap()">
+                <div class="bg-amber-400 text-emerald-950 p-2.5 rounded-2xl shadow-md text-xl animate-bounce">
+                    <i class="fa-solid fa-compass"></i>
+                </div>
+                <div>
+                    <h1 class="title-font text-xl md:text-2xl tracking-wide text-amber-300 drop-shadow">Jungle Readers</h1>
+                    <p class="text-xs text-emerald-200">Reading Adventure for Grade 3</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-800/80 px-3.5 py-1.5 rounded-full border border-amber-400/50 flex items-center space-x-2 shadow-inner">
+                    <i class="fa-solid fa-star text-amber-400 text-lg"></i>
+                    <span id="total-stars-badge" class="title-font text-amber-300 text-lg">0</span>
+                    <span class="text-xs text-emerald-200">/ 25</span>
+                </div>
+                <button onclick="openInstructionsModal()" class="bg-amber-500 hover:bg-amber-400 text-emerald-950 font-bold px-3 py-1.5 rounded-xl shadow transition transform hover:scale-105 text-sm flex items-center gap-1">
+                    <i class="fa-solid fa-circle-question"></i> <span class="hidden sm:inline">Help</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
+
+        <!-- SCREEN 1: WELCOME SCREEN -->
+        <div id="screen-welcome" class="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-10 text-center border-4 border-amber-400 relative overflow-hidden">
+            <!-- Decorative jungle leaves background accent -->
+            <div class="absolute -top-10 -left-10 text-emerald-100 text-9{-} opacity-35 pointer-events-none">
+                <i class="fa-solid fa-leaf text-8xl text-emerald-200"></i>
+            </div>
+            <div class="absolute -bottom-10 -right-10 pointer-events-none">
+                <i class="fa-solid fa-tree text-8xl text-emerald-200 opacity-35"></i>
+            </div>
+
+            <div class="relative z-10">
+                <div class="inline-block bg-amber-100 text-amber-700 px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider mb-4 border border-amber-300 animate-pulse-gentle">
+                    🦁 Welcome, Young Explorer! 🦜
+                </div>
+                
+                <h2 class="title-font text-3xl md:text-5xl text-emerald-800 mb-2 drop-shadow-sm">
+                    Jungle Readers
+                </h2>
+                <p class="title-font text-xl md:text-2xl text-amber-600 mb-6">
+                    “Read, Think, and Explore the Jungle!”
+                </p>
+
+                <!-- Cute animal illustration grid -->
+                <div class="flex justify-center items-center gap-4 my-6 text-4xl md:text-5xl">
+                    <span class="animate-float" style="animation-delay: 0s;">🦜</span>
+                    <span class="animate-float" style="animation-delay: 0.5s;">🐒</span>
+                    <span class="animate-float" style="animation-delay: 1s;">🐘</span>
+                    <span class="animate-float" style="animation-delay: 1.5s;">🐅</span>
+                    <span class="animate-float" style="animation-delay: 2s;">🦁</span>
+                </div>
+
+                <p class="text-gray-600 max-w-lg mx-auto mb-8 text-base md:text-lg">
+                    Join our friendly jungle animals on an exciting reading journey! Read short stories, answer fun questions, and collect shining star badges!
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button onclick="goToMap()" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white title-font text-xl px-8 py-4 rounded-2xl shadow-lg transform hover:scale-105 transition flex items-center justify-center gap-3 border-b-4 border-amber-700">
+                        <i class="fa-solid fa-play text-2xl"></i> START ADVENTURE
+                    </button>
+                    <button onclick="openInstructionsModal()" class="w-full sm:w-auto bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold px-6 py-4 rounded-2xl shadow transition flex items-center justify-center gap-2 border border-emerald-300">
+                        <i class="fa-solid fa-book-open"></i> How to Play
+                    </button>
+                    <button onclick="openAboutModal()" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-4 rounded-2xl shadow transition flex items-center justify-center gap-2 border border-gray-300">
+                        <i class="fa-solid fa-circle-info"></i> About
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: JUNGLE MAP (LEVEL SELECTOR) -->
+        <div id="screen-map" class="hidden bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border-4 border-amber-400">
+            <div class="text-center mb-6">
+                <span class="bg-emerald-100 text-emerald-800 px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider border border-emerald-300">
+                    🗺️ Jungle Adventure Map
+                </span>
+                <h3 class="title-font text-2xl md:text-3xl text-emerald-800 mt-2">Choose Your Reading Trail</h3>
+                <p class="text-gray-600 text-sm md:text-base">Complete each level in order to help our animal friends!</p>
+            </div>
+
+            <!-- Levels Container -->
+            <div id="levels-container" class="space-y-4 max-w-2xl mx-auto">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <div class="mt-8 text-center flex justify-between items-center">
+                <button onclick="goToWelcome()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-5 py-2.5 rounded-xl transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-house"></i> Home
+                </button>
+                <button onclick="checkFinalResultsFromMap()" id="btn-view-final" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-2.5 rounded-xl shadow transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-trophy text-amber-300"></i> View Final Scoreboard
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: READING PASSAGE SCREEN -->
+        <div id="screen-passage" class="hidden bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border-4 border-amber-400">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <button onclick="goToMap()" class="text-emerald-700 hover:text-emerald-900 font-bold text-sm flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+                    <i class="fa-solid fa-arrow-left"></i> Jungle Map
+                </button>
+                <span id="passage-progress-indicator" class="bg-amber-100 text-amber-800 text-xs md:text-sm font-bold px-3 py-1 rounded-full border border-amber-300">
+                    Story 1 of 5
+                </span>
+            </div>
+
+            <div class="text-center mb-4">
+                <div id="passage-animal-icon" class="text-5xl mb-1 animate-bounce">🦜</div>
+                <h3 id="passage-title" class="title-font text-2xl md:text-3xl text-emerald-900">The Little Bird in the Garden</h3>
+            </div>
+
+            <!-- Passage Card with Styled Text -->
+            <div class="bg-emerald-50/80 rounded-2xl p-5 md:p-6 border-2 border-emerald-200 shadow-inner mb-6">
+                <div id="passage-text" class="text-gray-700 text-base md:text-lg leading-relaxed space-y-4">
+                    <!-- Text inserted dynamically -->
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="startQuiz()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white title-font text-lg px-8 py-3.5 rounded-2xl shadow-lg transform hover:scale-105 transition flex items-center justify-center gap-2 mx-auto border-b-4 border-emerald-800">
+                    <i class="fa-solid fa-pen-to-square"></i> LET'S ANSWER!
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: QUIZ SCREEN -->
+        <div id="screen-quiz" class="hidden bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border-4 border-amber-400">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <span id="quiz-level-indicator" class="bg-emerald-100 text-emerald-800 text-xs md:text-sm font-bold px-3 py-1 rounded-full border border-emerald-300">
+                    Level 1 Quiz
+                </span>
+                <span id="quiz-progress-indicator" class="bg-amber-100 text-amber-800 text-xs md:text-sm font-bold px-3 py-1 rounded-full border border-amber-300">
+                    Question 1 of 5
+                </span>
+            </div>
+
+            <!-- Question Box -->
+            <div class="mb-6">
+                <h4 id="quiz-question-text" class="title-font text-lg md:text-xl text-emerald-900 mb-4">
+                    Where did Mia find the little bird?
+                </h4>
+
+                <!-- Answer Options Grid -->
+                <div id="quiz-options-container" class="space-y-3">
+                    <!-- Options populated via JS -->
+                </div>
+            </div>
+
+            <!-- Feedback Box -->
+            <div id="quiz-feedback-box" class="hidden p-4 rounded-2xl mb-6 text-center transition-all duration-300">
+                <p id="quiz-feedback-text" class="title-font text-lg"></p>
+            </div>
+
+            <!-- Next Question / Finish Button -->
+            <div class="flex justify-end">
+                <button id="btn-next-question" onclick="handleNextQuestion()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white title-font px-6 py-3 rounded-xl shadow transition flex items-center gap-2">
+                    NEXT QUESTION <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: LEVEL SUMMARY SCREEN -->
+        <div id="screen-level-summary" class="hidden bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 text-center border-4 border-amber-400">
+            <div class="inline-block text-6xl mb-2 animate-bounce" id="summary-badge-icon">⭐</div>
+            <h3 class="title-font text-2xl md:text-3xl text-emerald-900 mb-1" id="summary-title">Level Completed!</h3>
+            <p id="summary-message" class="title-font text-lg text-amber-600 mb-4">Amazing! You are a Jungle Reading Champion!</p>
+
+            <div class="bg-emerald-50 rounded-2xl p-6 border border-emerald-200 max-w-md mx-auto mb-6 shadow-inner">
+                <div class="flex justify-around items-center">
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase font-bold">Score</p>
+                        <p id="summary-score-text" class="title-font text-3xl text-emerald-800">5 / 5</p>
+                    </div>
+                    <div class="border-r border-emerald-200 h-10"></div>
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase font-bold">Stars Earned</p>
+                        <p id="summary-stars-text" class="title-font text-3xl text-amber-500">⭐⭐⭐⭐⭐</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+                <button onclick="goToMap()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-map"></i> Back to Jungle Map
+                </button>
+                <button onclick="openReviewModal()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-clipboard-list"></i> Review Answers
+                </button>
+                <button onclick="retryCurrentLevel()" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2 border border-gray-300">
+                    <i class="fa-solid fa-rotate-right"></i> Retry Level
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: FINAL CELEBRATION SCREEN -->
+        <div id="screen-final" class="hidden bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 text-center border-4 border-amber-400">
+            <div class="text-6xl mb-2 animate-bounce">🏆🦁🎉</div>
+            <h3 class="title-font text-3xl md:text-4xl text-emerald-900 mb-2">Jungle Reading Champion!</h3>
+            <p class="text-amber-600 font-bold mb-6">You have completed all 5 jungle adventures!</p>
+
+            <!-- Final Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto mb-6">
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 shadow-sm">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Total Score</p>
+                    <p id="final-total-score" class="title-font text-2xl text-emerald-800">25 / 25</p>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 shadow-sm">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Percentage</p>
+                    <p id="final-percentage" class="title-font text-2xl text-amber-600">100%</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-200 shadow-sm">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Stars Earned</p>
+                    <p id="final-stars-count" class="title-font text-2xl text-blue-600">25 ⭐</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-2xl border border-purple-200 shadow-sm">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Levels Done</p>
+                    <p class="title-font text-2xl text-purple-600">5 / 5 🗺️</p>
+                </div>
+            </div>
+
+            <!-- Detailed breakdown -->
+            <div class="bg-gray-50 p-4 rounded-2xl max-w-md mx-auto mb-6 text-sm text-gray-700 border border-gray-200 flex justify-around">
+                <div><span class="font-bold text-emerald-600" id="final-correct-count">25</span> Correct</div>
+                <div><span class="font-bold text-red-500" id="final-incorrect-count">0</span> Incorrect</div>
+                <div><span class="font-bold text-blue-600">5</span> Badges Unlocked</div>
+            </div>
+
+            <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                Fantastic job exploring the jungle! Your reading skills are shining brighter than ever. Keep up the wonderful work!
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+                <button onclick="restartFullGame()" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> PLAY AGAIN
+                </button>
+                <button onclick="openReviewModal()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3.5 rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-clipboard-list"></i> REVIEW ALL ANSWERS
+                </button>
+                <button onclick="goToMap()" class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-6 py-3.5 rounded-xl shadow transition flex items-center justify-center gap-2 border border-gray-300">
+                    <i class="fa-solid fa-map"></i> JUNGLE MAP
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-emerald-950 text-emerald-300 text-center py-4 text-xs mt-auto border-t border-emerald-800">
+        <p>🌿 Jungle Readers: Reading Adventure! Designed for Grade 3 Learners 🐾</p>
+    </footer>
+
+    <!-- INSTRUCTIONS MODAL -->
+    <div id="modal-instructions" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl border-4 border-amber-400 relative">
+            <button onclick="closeModal('modal-instructions')" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-600 w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-4">
+                <span class="text-4xl">📖</span>
+                <h3 class="title-font text-2xl text-emerald-900 mt-1">How to Play</h3>
+            </div>
+            <ol class="space-y-3 text-gray-700 text-sm md:text-base mb-6">
+                <li class="flex items-start gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                    <span class="bg-emerald-600 text-white font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs mt-0.5">1</span>
+                    <span><strong>Read the story carefully</strong> on the passage screen. Take your time!</span>
+                </li>
+                <li class="flex items-start gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                    <span class="bg-emerald-600 text-white font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs mt-0.5">2</span>
+                    <span><strong>Answer five questions</strong> about the story using multiple choice options.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                    <span class="bg-emerald-600 text-white font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs mt-0.5">3</span>
+                    <span><strong>Earn stars and collect rewards</strong> for every correct answer you submit.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                    <span class="bg-emerald-600 text-white font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs mt-0.5">4</span>
+                    <span><strong>Complete all five jungle reading challenges</strong> to become the Ultimate Jungle Reading Champion!</span>
+                </li>
+            </ol>
+            <div class="text-center">
+                <button onclick="closeModal('modal-instructions')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">
+                    Got It, Let's Play!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT MODAL -->
+    <div id="modal-about" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl border-4 border-amber-400 relative text-center">
+            <button onclick="closeModal('modal-about')" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-600 w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <span class="text-5xl">🦁</span>
+            <h3 class="title-font text-2xl text-emerald-900 mt-2">About the Game</h3>
+            <p class="text-gray-600 text-sm my-4 leading-relaxed">
+                <strong>Jungle Readers: Reading Adventure!</strong> is specifically crafted for Grade 3 elementary pupils (ages 8-9). It combines engaging storytelling with comprehension challenges to make reading fun, interactive, and rewarding!
+            </p>
+            <button onclick="closeModal('modal-about')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- REVIEW ANSWERS MODAL -->
+    <div id="modal-review" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl border-4 border-amber-400 relative max-h-[90vh] flex flex-col">
+            <button onclick="closeModal('modal-review')" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-600 w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-4 flex-shrink-0">
+                <span class="text-4xl">📋</span>
+                <h3 id="review-modal-title" class="title-font text-2xl text-emerald-900 mt-1">Level Review</h3>
+            </div>
+            <div id="review-content-container" class="overflow-y-auto space-y-4 pr-2 flex-grow">
+                <!-- Dynamically populated review items -->
+            </div>
+            <div class="text-center mt-4 pt-3 border-t flex-shrink-0">
+                <button onclick="closeModal('modal-review')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">
+                    Close Review
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game Data: 5 Levels with Passages and 5 Questions each
+        const gameData = [
+            {
+                levelId: 1,
+                title: "The Bird's Garden",
+                animal: "Parrot",
+                icon: "🦜",
+                badge: "Parrot Feather Badge",
+                passageTitle: "The Little Bird in the Garden",
+                passageText: [
+                    "One sunny morning, Mia went to the garden to water the plants. Suddenly, she heard a soft chirping sound near a small tree. She looked around and saw a little bird on the ground. The bird could not fly because its wing was hurt.",
+                    "Mia carefully placed the bird in a small basket lined with a soft cloth. She asked her mother for help. Her mother contacted an animal rescuer who knew how to care for injured birds.",
+                    "After a few days, the bird became stronger. Mia and her mother brought it to the garden and watched it fly toward the trees. Mia smiled because she had helped a little creature in need."
+                ],
+                questions: [
+                    {
+                        question: "Where did Mia find the little bird?",
+                        options: ["Inside her house", "Near a small tree", "On the roof", "Beside a river"],
+                        correctIndex: 1
+                    },
+                    {
+                        question: "Why could the bird not fly?",
+                        options: ["It was too sleepy.", "It was hungry.", "Its wing was hurt.", "It was afraid of Mia."],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "What did Mia use to carry the bird?",
+                        options: ["A cardboard box", "A paper bag", "A small basket", "A glass jar"],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "Who helped Mia care for the bird?",
+                        options: ["Her teacher", "Her mother and an animal rescuer", "Her best friend", "Her neighbor"],
+                        correctIndex: 1
+                    },
+                    {
+                        question: "What lesson can we learn from the story?",
+                        options: ["We should avoid gardens.", "We should keep all birds as pets.", "We should help animals in need.", "We should never touch plants."],
+                        correctIndex: 2
+                    }
+                ]
+            },
+            {
+                levelId: 2,
+                title: "The Missing Lunchbox",
+                animal: "Monkey",
+                icon: "🐒",
+                badge: "Monkey Banana Badge",
+                passageTitle: "Ben's Missing Lunchbox",
+                passageText: [
+                    "Ben was excited to eat his lunch during recess. He opened his backpack, but his lunchbox was missing. He checked every pocket, but he could not find it.",
+                    "Ben remembered that he had placed his lunchbox on the library table after reading a book that morning. He quickly asked his teacher for permission to visit the library.",
+                    "When Ben arrived, he saw his red lunchbox beside a stack of books. He thanked the librarian for keeping it safe. Ben returned to his classroom and shared some of his sandwiches with his friend Carlo.",
+                    "Ben learned that keeping his belongings in the proper place could help him avoid losing them."
+                ],
+                questions: [
+                    {
+                        question: "What was Ben looking for?",
+                        options: ["His notebook", "His lunchbox", "His pencil case", "His school shoes"],
+                        correctIndex: 1
+                    },
+                    {
+                        question: "Where did Ben leave his lunchbox?",
+                        options: ["In the playground", "Under his chair", "On the library table", "Inside the teacher's bag"],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "What did Ben do before going to the library?",
+                        options: ["He asked his teacher for permission.", "He went home.", "He called his mother.", "He ate his lunch."],
+                        correctIndex: 0
+                    },
+                    {
+                        question: "What color was Ben's lunchbox?",
+                        options: ["Blue", "Green", "Yellow", "Red"],
+                        correctIndex: 3
+                    },
+                    {
+                        question: "What did Ben learn from his experience?",
+                        options: ["Never visit the library.", "Always buy a new lunchbox.", "Keep belongings in their proper places.", "Avoid sharing food with friends."],
+                        correctIndex: 2
+                    }
+                ]
+            },
+            {
+                levelId: 3,
+                title: "Grandpa's Garden",
+                animal: "Elephant",
+                icon: "🐘",
+                badge: "Elephant Tusk Badge",
+                passageTitle: "Planting Seeds with Grandpa",
+                passageText: [
+                    "On Saturday morning, Leo helped his grandfather plant vegetable seeds in their backyard. Grandpa gave Leo a small shovel and showed him how to make holes in the soil.",
+                    "Leo placed the seeds in the holes and covered them with soil. Then, he watered the garden carefully. Grandpa explained that plants need sunlight, water, air, and nutrients from the soil to grow.",
+                    "Every day, Leo checked the garden before going to school. After several weeks, tiny green leaves appeared. Leo was happy to see the plants growing. Grandpa told him that patience and regular care were important when growing plants."
+                ],
+                questions: [
+                    {
+                        question: "When did Leo help his grandfather?",
+                        options: ["Monday afternoon", "Saturday morning", "Friday evening", "Sunday night"],
+                        correctIndex: 1
+                    },
+                    {
+                        question: "What did Leo plant?",
+                        options: ["Flower petals", "Fruit peels", "Vegetable seeds", "Tree branches"],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "What did Leo do after covering the seeds with soil?",
+                        options: ["He watered the garden.", "He pulled out the seeds.", "He picked the vegetables.", "He covered the garden with paper."],
+                        correctIndex: 0
+                    },
+                    {
+                        question: "What appeared after several weeks?",
+                        options: ["Colorful stones", "Dry branches", "Tiny green leaves", "Large flowers"],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "What does the story teach us?",
+                        options: ["Plants grow without care.", "Gardening requires patience and care.", "Seeds should not be watered.", "Plants do not need sunlight."],
+                        correctIndex: 1
+                    }
+                ]
+            },
+            {
+                levelId: 4,
+                title: "The Rainy School Day",
+                animal: "Tiger",
+                icon: "🐅",
+                badge: "Tiger Stripe Badge",
+                passageTitle: "A Rainy Day at School",
+                passageText: [
+                    "It was a rainy Tuesday morning when Ana arrived at school. She carried a blue umbrella and wore her yellow raincoat. Many of her classmates were already inside the classroom because the playground was wet.",
+                    "Their teacher, Mrs. Santos, decided to change the outdoor activity into an indoor reading game. She divided the class into three groups. Each group read a short story and answered questions about it.",
+                    "Ana's group worked together and listened carefully to one another. They answered all five questions correctly and earned a star. At the end of the activity, Mrs. Santos praised everyone for cooperating.",
+                    "Ana realized that even when plans changed, learning could still be fun."
+                ],
+                questions: [
+                    {
+                        question: "What kind of weather did Ana experience?",
+                        options: ["Sunny", "Windy", "Rainy", "Snowy"],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "What color was Ana's umbrella?",
+                        options: ["Blue", "Pink", "Red", "Green"],
+                        correctIndex: 0
+                    },
+                    {
+                        question: "Why did the teacher change the activity?",
+                        options: ["The classroom was closed.", "The playground was wet.", "The students wanted to go home.", "The teacher forgot the lesson."],
+                        correctIndex: 1
+                    },
+                    {
+                        question: "How many questions did Ana's group answer correctly?",
+                        options: ["Three", "Four", "Six", "Five"],
+                        correctIndex: 3
+                    },
+                    {
+                        question: "What is the main lesson of the story?",
+                        options: ["Rainy days are always boring.", "Students should never work in groups.", "Learning can still be fun when plans change.", "Outdoor activities are not important."],
+                        correctIndex: 2
+                    }
+                ]
+            },
+            {
+                levelId: 5,
+                title: "The Helpful Boy",
+                animal: "Lion",
+                icon: "🦁",
+                badge: "Lion King Badge",
+                passageTitle: "The Helpful Boy",
+                passageText: [
+                    "One afternoon, Marco was walking home from school when he saw an elderly woman carrying two heavy grocery bags. She stopped to rest near a small store.",
+                    "Marco politely asked, “Ma'am, would you like me to help you carry your bags?” The woman smiled and accepted his offer. Marco carried one bag while the woman carried the other.",
+                    "They walked slowly until they reached her house. The woman thanked Marco and told him that his kindness had made her day easier. Marco felt happy because he had helped someone without expecting a reward.",
+                    "When he arrived home, he told his family what happened. His parents reminded him that even small acts of kindness could make a big difference."
+                ],
+                questions: [
+                    {
+                        question: "Who did Marco meet on his way home?",
+                        options: ["An elderly woman", "A police officer", "A school principal", "A shopkeeper"],
+                        correctIndex: 0
+                    },
+                    {
+                        question: "What was the woman carrying?",
+                        options: ["Two school bags", "Two heavy grocery bags", "A basket of flowers", "A box of toys"],
+                        correctIndex: 1
+                    },
+                    {
+                        question: "How did Marco help the woman?",
+                        options: ["He bought her a new house.", "He called a taxi.", "He carried one of her grocery bags.", "He gave her his schoolbag."],
+                        correctIndex: 2
+                    },
+                    {
+                        question: "How did Marco feel after helping the woman?",
+                        options: ["Angry", "Worried", "Embarrassed", "Happy"],
+                        correctIndex: 3
+                    },
+                    {
+                        question: "What is the best title for the story?",
+                        options: ["The Lost Grocery Bags", "The Helpful Boy", "The Rainy Afternoon", "The New Store"],
+                        correctIndex: 1
+                    }
+                ]
+            }
+        ];
+
+        // Application State
+        let currentLevelIndex = 0;
+        let currentQuestionIndex = 0;
+        let levelScores = {}; // stores score for each levelId
+        let levelAnswersHistory = {}; // stores user answers per levelId for review
+        let levelCompletedStatus = {}; // tracks completed levels
+
+        // Initialize App on Load
+        window.onload = function() {
+            loadProgressFromStorage();
+            renderJungleMap();
+            updateTotalStarsDisplay();
+        };
+
+        // Navigation Functions
+        function hideAllScreens() {
+            const screens = ['screen-welcome', 'screen-map', 'screen-passage', 'screen-quiz', 'screen-level-summary', 'screen-final'];
+            screens.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+        }
+
+        function goToWelcome() {
+            hideAllScreens();
+            document.getElementById('screen-welcome').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function goToMap() {
+            hideAllScreens();
+            renderJungleMap();
+            document.getElementById('screen-map').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function openInstructionsModal() {
+            document.getElementById('modal-instructions').classList.remove('hidden');
+        }
+
+        function openAboutModal() {
+            document.getElementById('modal-about').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Render Jungle Map Levels
+        function renderJungleMap() {
+            const container = document.getElementById('levels-container');
+            container.innerHTML = '';
+
+            let allCompleted = true;
+
+            gameData.forEach((lvl, index) => {
+                const isUnlocked = index === 0 || levelCompletedStatus[gameData[index - 1].levelId];
+                const isCompleted = levelCompletedStatus[lvl.levelId];
+                const score = levelScores[lvl.levelId] !== undefined ? levelScores[lvl.levelId] : '-';
+
+                if (!isCompleted) {
+                    allCompleted = false;
+                }
+
+                const cardClass = isUnlocked 
+                    ? (isCompleted ? 'bg-emerald-50 border-emerald-400 hover:border-emerald-500 cursor-pointer' : 'bg-white border-amber-300 hover:border-amber-500 cursor-pointer shadow-md')
+                    : 'bg-gray-100 border-gray-300 opacity-60 cursor-not-allowed';
+
+                const cardHtml = `
+                    <div onclick="${isUnlocked ? `selectLevel(${index})` : `showLockedMessage()`}" class="border-3 rounded-2xl p-4 md:p-5 flex items-center justify-between transition-all transform hover:scale-[1.01] ${cardClass}">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl bg-amber-100 border-2 border-amber-300 shadow-sm flex-shrink-0">
+                                ${lvl.icon}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-emerald-800 text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full">Level ${lvl.levelId}</span>
+                                    ${isCompleted ? '<span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1"><i class="fa-solid fa-check"></i> Completed</span>' : ''}
+                                </div>
+                                <h4 class="title-font text-lg md:text-xl text-emerald-900 mt-1">${lvl.title}</h4>
+                                <p class="text-xs text-gray-500">Animal Guide: <strong>${lvl.animal}</strong> (5 Questions)</p>
+                            </div>
+                        </div>
+                        <div class="text-right flex items-center space-x-3">
+                            <div class="hidden sm:block">
+                                <span class="text-xs text-gray-500 block">Score</span>
+                                <span class="title-font text-lg text-emerald-800">${score}/5</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${isUnlocked ? (isCompleted ? 'bg-green-500 text-white' : 'bg-amber-400 text-white') : 'bg-gray-300 text-gray-500'}">
+                                <i class="fa-solid ${isUnlocked ? (isCompleted ? 'fa-check' : 'fa-play') : 'fa-lock'}"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+
+            // Check if final results button should show
+            const btnFinal = document.getElementById('btn-view-final');
+            if (allCompleted) {
+                btnFinal.classList.remove('hidden');
+            } else {
+                btnFinal.classList.add('hidden');
+            }
+        }
+
+        function showLockedMessage() {
+            showToast("🔒 Complete the previous level first to unlock this adventure!");
+        }
+
+        function showToast(msg) {
+            // Simple non-blocking alert substitute
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-emerald-900 text-amber-300 px-6 py-3 rounded-2xl shadow-2xl z-50 title-font text-sm border-2 border-amber-400 animate-bounce';
+            toast.innerHTML = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Start Level Passage
+        function selectLevel(index) {
+            currentLevelIndex = index;
+            currentQuestionIndex = 0;
+            const lvl = gameData[currentLevelIndex];
+
+            // Render Passage Screen
+            document.getElementById('passage-progress-indicator').innerText = `Story ${lvl.levelId} of 5`;
+            document.getElementById('passage-animal-icon').innerText = lvl.icon;
+            document.getElementById('passage-title').innerText = lvl.passageTitle;
+
+            const textContainer = document.getElementById('passage-text');
+            textContainer.innerHTML = '';
+            lvl.passageText.forEach(paragraph => {
+                textContainer.innerHTML += `<p>${paragraph}</p>`;
+            });
+
+            hideAllScreens();
+            document.getElementById('screen-passage').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        // Start Quiz for Current Level
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            // Initialize answer history array for this level if not present
+            if (!levelAnswersHistory[gameData[currentLevelIndex].levelId]) {
+                levelAnswersHistory[gameData[currentLevelIndex].levelId] = [];
+            }
+            hideAllScreens();
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            loadQuestion();
+            window.scrollTo(0,0);
+        }
+
+        function loadQuestion() {
+            const lvl = gameData[currentLevelIndex];
+            const q = lvl.questions[currentQuestionIndex];
+
+            document.getElementById('quiz-level-indicator').innerText = `Level ${lvl.levelId}: ${lvl.title}`;
+            document.getElementById('quiz-progress-indicator').innerText = `Question ${currentQuestionIndex + 1} of 5`;
+            document.getElementById('quiz-question-text').innerText = `${currentQuestionIndex + 1}. ${q.question}`;
+
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const optLetter = String.fromCharCode(65 + idx); // A, B, C, D
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 text-gray-800 font-bold p-4 rounded-2xl transition flex items-center space-x-3 shadow-sm';
+                btn.innerHTML = `<span class="bg-emerald-200 text-emerald-900 w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0">${optLetter}</span> <span class="text-base">${opt}</span>`;
+                btn.onclick = () => selectAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Reset feedback & next button
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+            document.getElementById('btn-next-question').classList.add('hidden');
+        }
+
+        // Handle Answer Selection
+        function selectAnswer(selectedIndex) {
+            const lvl = gameData[currentLevelIndex];
+            const q = lvl.questions[currentQuestionIndex];
+            const correctIndex = q.correctIndex;
+
+            // Prevent changing answer once clicked
+            const optionButtons = document.getElementById('quiz-options-container').getElementsByTagName('button');
+            for (let btn of optionButtons) {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-emerald-100');
+            }
+
+            // Save answer to history
+            levelAnswersHistory[lvl.levelId][currentQuestionIndex] = {
+                question: q.question,
+                options: q.options,
+                selectedIndex: selectedIndex,
+                correctIndex: correctIndex
+            };
+
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+            feedbackBox.classList.remove('hidden');
+
+            // Highlight buttons
+            if (selectedIndex === correctIndex) {
+                optionButtons[selectedIndex].className = 'w-full text-left bg-green-100 border-2 border-green-500 text-green-900 font-bold p-4 rounded-2xl flex items-center space-x-3 shadow-md';
+                feedbackBox.className = 'p-4 rounded-2xl mb-6 text-center bg-green-100 border-2 border-green-400 text-green-800';
+                feedbackText.innerHTML = `🎉 Great job, Jungle Explorer! That is correct!`;
+                
+                // Play mini confetti
+                confetti({ particleCount: 30, spread: 60, origin: { y: 0.6 } });
+            } else {
+                optionButtons[selectedIndex].className = 'w-full text-left bg-red-100 border-2 border-red-500 text-red-900 font-bold p-4 rounded-2xl flex items-center space-x-3 shadow-md';
+                optionButtons[correctIndex].className = 'w-full text-left bg-green-100 border-2 border-green-500 text-green-900 font-bold p-4 rounded-2xl flex items-center space-x-3 shadow-md';
+                feedbackBox.className = 'p-4 rounded-2xl mb-6 text-center bg-amber-100 border-2 border-amber-400 text-amber-900';
+                feedbackText.innerHTML = `💪 Good try! Keep learning! The correct answer is highlighted in green.`;
+            }
+
+            // Show Next Button
+            document.getElementById('btn-next-question').classList.remove('hidden');
+        }
+
+        // Handle Next Question or Level Finish
+        function handleNextQuestion() {
+            currentQuestionIndex++;
+            const lvl = gameData[currentLevelIndex];
+
+            if (currentQuestionIndex < lvl.questions.length) {
+                loadQuestion();
+            } else {
+                finishLevel();
+            }
+        }
+
+        // Finish Level & Calculate Score
+        function finishLevel() {
+            const lvl = gameData[currentLevelIndex];
+            const history = levelAnswersHistory[lvl.levelId];
+            
+            let score = 0;
+            history.forEach(item => {
+                if (item.selectedIndex === item.correctIndex) {
+                    score++;
+                }
+            });
+
+            levelScores[lvl.levelId] = score;
+            levelCompletedStatus[lvl.levelId] = true;
+            saveProgressToStorage();
+
+            // Setup Summary Screen
+            document.getElementById('summary-badge-icon').innerText = score === 5 ? '🏆' : '⭐';
+            document.getElementById('summary-title').innerText = `Level ${lvl.levelId} Completed!`;
+            
+            let encouragingMsg = "";
+            if (score === 5) encouragingMsg = "Amazing! You are a Jungle Reading Champion!";
+            else if (score === 4) encouragingMsg = "Excellent work! Keep exploring!";
+            else if (score === 3) encouragingMsg = "Good job! Practice makes progress!";
+            else if (score >= 1) encouragingMsg = "Keep trying, Explorer! Read again and do your best!";
+            else encouragingMsg = "Every adventure is a chance to learn. Try again!";
+
+            document.getElementById('summary-message').innerText = encouragingMsg;
+            document.getElementById('summary-score-text').innerText = `${score} / 5`;
+            
+            let starsStr = "";
+            for (let i = 0; i < score; i++) starsStr += "⭐";
+            if (score === 0) starsStr = "❌";
+            document.getElementById('summary-stars-text').innerText = starsStr;
+
+            hideAllScreens();
+            document.getElementById('screen-level-summary').classList.remove('hidden');
+            updateTotalStarsDisplay();
+            window.scrollTo(0,0);
+
+            // Grand confetti if level completed
+            confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
+
+            // Check if all 5 levels are completed
+            if (Object.keys(levelCompletedStatus).length === 5) {
+                setTimeout(() => {
+                    // Check if all 5 are actually true
+                    let allDone = true;
+                    gameData.forEach(l => { if (!levelCompletedStatus[l.levelId]) allDone = false; });
+                    if (allDone) {
+                        // Could prompt or let user view map, but let's make final screen accessible via map or prompt
+                    }
+                }, 1000);
+            }
+        }
+
+        function retryCurrentLevel() {
+            startQuiz();
+        }
+
+        // Open Review Modal for Current Level or All
+        function openReviewModal() {
+            const lvl = gameData[currentLevelIndex];
+            const history = levelAnswersHistory[lvl.levelId] || [];
+            
+            document.getElementById('review-modal-title').innerText = `Review: Level ${lvl.levelId} - ${lvl.title}`;
+            const container = document.getElementById('review-content-container');
+            container.innerHTML = '';
+
+            history.forEach((item, idx) => {
+                const isCorrect = item.selectedIndex === item.correctIndex;
+                const userAnsText = item.options[item.selectedIndex];
+                const correctAnsText = item.options[item.correctIndex];
+
+                container.innerHTML += `
+                    <div class="bg-gray-50 border-2 ${isCorrect ? 'border-green-300 bg-green-50/50' : 'border-red-300 bg-red-50/50'} rounded-2xl p-4">
+                        <p class="font-bold text-gray-800 text-sm md:text-base mb-2">Q${idx + 1}: ${item.question}</p>
+                        <p class="text-xs md:text-sm ${isCorrect ? 'text-green-700' : 'text-red-600'} mb-1">
+                            Your Answer: <strong>${userAnsText}</strong> ${isCorrect ? '✅' : '❌'}
+                        </p>
+                        ${!isCorrect ? `<p class="text-xs md:text-sm text-green-700 font-semibold">Correct Answer: <strong>${correctAnsText}</strong> ✅</p>` : ''}
+                    </div>
+                `;
+            });
+
+            document.getElementById('modal-review').classList.remove('hidden');
+        }
+
+        // Check Final Results from Map
+        function checkFinalResultsFromMap() {
+            let totalCorrect = 0;
+            let levelsDone = 0;
+
+            gameData.forEach(lvl => {
+                if (levelScores[lvl.levelId] !== undefined) {
+                    totalCorrect += levelScores[lvl.levelId];
+                    levelsDone++;
+                }
+            });
+
+            const percentage = Math.round((totalCorrect / 25) * 100);
+            const incorrect = (levelsDone * 5) - totalCorrect;
+
+            document.getElementById('final-total-score').innerText = `${totalCorrect} / 25`;
+            document.getElementById('final-percentage').innerText = `${percentage}%`;
+            document.getElementById('final-stars-count').innerText = `${totalCorrect} ⭐`;
+            document.getElementById('final-correct-count').innerText = totalCorrect;
+            document.getElementById('final-incorrect-count').innerText = incorrect >= 0 ? incorrect : 0;
+
+            hideAllScreens();
+            document.getElementById('screen-final').classList.remove('hidden');
+            window.scrollTo(0,0);
+
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.4 } });
+        }
+
+        // Update Header Stars Badge
+        function updateTotalStarsDisplay() {
+            let total = 0;
+            Object.values(levelScores).forEach(sc => total += sc);
+            document.getElementById('total-stars-badge').innerText = total;
+        }
+
+        // Restart Game
+        function restartFullGame() {
+            levelScores = {};
+            levelAnswersHistory = {};
+            levelCompletedStatus = {};
+            localStorage.removeItem('jungle_readers_scores');
+            localStorage.removeItem('jungle_readers_status');
+            updateTotalStarsDisplay();
+            goToMap();
+        }
+
+        // Local Storage persistence
+        function saveProgressToStorage() {
+            localStorage.setItem('jungle_readers_scores', JSON.stringify(levelScores));
+            localStorage.setItem('jungle_readers_status', JSON.stringify(levelCompletedStatus));
+            localStorage.setItem('jungle_readers_history', JSON.stringify(levelAnswersHistory));
+        }
+
+        function loadProgressFromStorage() {
+            const savedScores = localStorage.getItem('jungle_readers_scores');
+            const savedStatus = localStorage.getItem('jungle_readers_status');
+            const savedHistory = localStorage.getItem('jungle_readers_history');
+
+            if (savedScores) levelScores = JSON.parse(savedScores);
+            if (savedStatus) levelCompletedStatus = JSON.parse(savedStatus);
+            if (savedHistory) levelAnswersHistory = JSON.parse(savedHistory);
+        }
+    </script>
+</body>
+</html>
